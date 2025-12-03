@@ -1,10 +1,12 @@
 import React from "react";
 
 const services = [
-  { name: "Terapia individual", duration: "50 min" },
-  { name: "Terapia de pareja", duration: "60 min" },
-  { name: "Sesión online", duration: "50 min" },
-  { name: "Consulta presencial", duration: "50 min" },
+  { name: "Adultos", duration: "60 min", pic:"/capacidades.jpeg" },
+  { name: "Parejas", duration: "60 min", pic:"/pareja.jpeg" },
+  { name: "Adicciones", duration: "60 min", pic:"/online.jpeg" },
+  { name: "Adolescentes", duration: "60 min", pic:"/individual.jpeg" },
+  { name: "Altas capacidades", duration: "60 min", pic:"/capacidades.jpeg" },
+  { name: "Sesión Online", duration: "60 min", pic:"/individual.jpeg" }
 ];
 
 export default function Services() {
@@ -16,6 +18,7 @@ export default function Services() {
           <div key={index} className="bg-blue-50 p-6 rounded-xl shadow-md w-64">
             <h3 className="text-2xl font-semibold mb-2">{service.name}</h3>
             <p className="text-blue-700">{service.duration}</p>
+            <img src={service.pic} width="200px"/>
           </div>
         ))}
       </div>

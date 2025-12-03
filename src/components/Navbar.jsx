@@ -1,13 +1,51 @@
-import React from "react";
+import { HashLink as Link } from "react-router-hash-link";
 
 export default function Navbar() {
   return (
     <nav className="bg-white shadow-md p-4 flex justify-between items-center">
-      <div className="text-xl font-bold text-blue-700">Galileo Psicólogos</div>
-      <ul className="flex gap-6">
-        <li><a href="#services" className="hover:text-blue-500">Servicios</a></li>
-        <li><a href="#booking" className="hover:text-blue-500">Reservar cita</a></li>
-        <li><a href="#contact" className="hover:text-blue-500">Contacto</a></li>
+      <Link
+        to="/"
+        className="text-xl font-bold text-gray-700 flex items-center gap-2"
+      >
+        <img src="/logoMi.png" width="50" alt="Logo" />
+        Galileo Psicólogos
+      </Link>
+      <ul className="flex gap-6 text-gray-700">
+        <li>
+          <Link
+            smooth
+            to="/#services"
+            className="hover:text-blue-500 transition-colors duration-200"
+          >
+            Servicios
+          </Link>
+        </li>
+        <li>
+          <Link
+            smooth
+            to="/booking"
+            className="hover:text-blue-500 transition-colors duration-200"
+          >
+            Reservar cita
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/sobreNosotros"
+            className="hover:text-blue-500 transition-colors duration-200"
+          >
+            Sobre Nosotros
+          </Link>
+        </li>
+        <li>
+          <Link
+            smooth
+            to="/#contact"
+            className="hover:text-blue-500 transition-colors duration-200"
+          >
+            Contacto
+          </Link>
+        </li>
       </ul>
     </nav>
   );
