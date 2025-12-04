@@ -6,7 +6,8 @@ import Services from "./components/Services";
 import ContactSection from "./components/Contact";
 import SobreNosotros from "./pages/SobreNosotros";
 import { Route, Routes } from "react-router-dom";
-import Booking from "./pages/Reserva";
+import Booking from "./pages/Booking";
+import PsychologistDashboard from "./pages/PsychologistDashboard";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         />
         <Route path="/sobreNosotros" element={<SobreNosotros />} />
         <Route path="/booking" element={<Booking />} />
+        <Route path="/admin-psicologos" element={<PsychologistDashboard />} />
       </Routes>
       <Footer />
     </div>
