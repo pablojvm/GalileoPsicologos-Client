@@ -3,60 +3,87 @@ import { createContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
-function AuthWrapper(props) {
+function AuthWrapper({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedUserId, setLoggedUserId] = useState(null);
+  const [authenticateUser, setAuthenticateUser] = useState(null); // contiene _id, role, username
   const [isValidatingToken, setIsValidatingToken] = useState(true);
 
-  const authenticateUser = async () => {
+  const authenticateUserFromToken = async () => {
     const authToken = localStorage.getItem("authToken");
+
+    if (!authToken) {
+      setIsLoggedIn(false);
+      setLoggedUserId(null);
+      setAuthenticateUser(null);
+      setIsValidatingToken(false);
+      return;
+    }
 
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/api/auth/verify`,
         {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
+          headers: { Authorization: `Bearer ${authToken}` },
         }
       );
 
       setIsLoggedIn(true);
       setLoggedUserId(response.data.payload._id);
+      setAuthenticateUser(response.data.payload); // ahora tenemos role y username
       setIsValidatingToken(false);
     } catch (error) {
+      console.error("Token inválido:", error);
+      localStorage.removeItem("authToken");
       setIsLoggedIn(false);
       setLoggedUserId(null);
+      setAuthenticateUser(null);
       setIsValidatingToken(false);
     }
   };
 
   useEffect(() => {
-    authenticateUser();
+    authenticateUserFromToken();
   }, []);
 
   const passedContext = {
     isLoggedIn,
     loggedUserId,
-    setLoggedUserId,
     authenticateUser,
+    setAuthenticateUser, // importante para poder actualizar el contexto al hacer logout
+    setLoggedUserId,
+    authenticateUserFromToken,
   };
 
+  // Bloque de validación con animación simple
   if (isValidatingToken) {
     return (
-      <div>
-        <h3>...validando usuario</h3>
-        <img src="loading.gif"/>
+      <div className="flex flex-col items-center justify-center h-screen bg-blue-50">
+        <div className="loader mb-4"></div>
+        <h3 className="text-blue-700 text-xl font-semibold animate-pulse">
+          Validando usuario...
+        </h3>
+        <style>
+          {`
+            .loader {
+              border: 6px solid #f3f3f3;
+              border-top: 6px solid #3b82f6;
+              border-radius: 50%;
+              width: 60px;
+              height: 60px;
+              animation: spin 1s linear infinite;
+            }
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}
+        </style>
       </div>
-      // hacer esta animacion muy bien hecha!!! muy importante
     );
   }
 
-  return (
-    <AuthContext.Provider value={passedContext}>
-      {props.children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={passedContext}>{children}</AuthContext.Provider>;
 }
 
 export { AuthContext, AuthWrapper };

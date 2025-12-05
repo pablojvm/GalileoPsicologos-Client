@@ -8,6 +8,7 @@ import SobreNosotros from "./pages/SobreNosotros";
 import { Route, Routes } from "react-router-dom";
 import Booking from "./pages/Booking";
 import PsychologistDashboard from "./pages/PsychologistDashboard";
+import AuthCallback from "./components/AuthCallBack";
 
 function App() {
   return (
@@ -26,7 +27,8 @@ function App() {
         />
         <Route path="/sobreNosotros" element={<SobreNosotros />} />
         <Route path="/booking" element={<Booking />} />
-        <Route path="/admin-psicologos" element={<PsychologistDashboard />} />
+        <Route path="/dashboard" element={<PsychologistDashboard />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
       </Routes>
       <Footer />
     </div>

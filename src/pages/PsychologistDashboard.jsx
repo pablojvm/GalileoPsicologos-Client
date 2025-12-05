@@ -7,22 +7,18 @@ export default function PsychologistDashboard() {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-  const fetchMySchedule = async () => {
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/appointment/my-schedule`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
-      const data = await res.json();
-      console.log("Mis citas:", data);
-    } catch (err) {
-      console.error("Error cargando agenda:", err);
-    }
-  };
-
-  fetchMySchedule();
+  mySchedule();
 }, []);
+
+const mySchedule = async () => {
+  try {
+    const res = await service.get("/appointment/my-schedule");
+    console.log("Mis citas:", res.data);
+    setAppointments(res.data);
+  } catch (err) {
+    console.error("Error cargando agenda:", err);
+  }
+};
 
 
   return (
@@ -33,13 +29,18 @@ export default function PsychologistDashboard() {
       ) : (
         <div className="grid gap-4">
           {appointments.map((app) => (
-            <div key={app._id} className="p-4 border rounded-lg flex justify-between items-center">
+            <div
+              key={app._id}
+              className="p-4 border rounded-lg flex justify-between items-center"
+            >
               <div>
                 <p>
-                  <span className="font-semibold">Paciente:</span> {app.patient.name}
+                  <span className="font-semibold">Paciente:</span>{" "}
+                  {app.patient.username}
                 </p>
                 <p>
-                  <span className="font-semibold">Fecha:</span> {new Date(app.date).toLocaleString()}
+                  <span className="font-semibold">Fecha:</span>{" "}
+                  {new Date(app.date).toLocaleString()}
                 </p>
                 <p>
                   <span className="font-semibold">Servicio:</span> {app.service}

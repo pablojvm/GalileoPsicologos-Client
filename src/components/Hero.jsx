@@ -1,13 +1,37 @@
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../context/auth.context";
+
 export default function Hero() {
+  const { authenticateUser } = useContext(AuthContext);
+
+  const handleAuthClick = () => {
+    if (!authenticateUser) {
+      // Usuario no autenticado → login Google
+      window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`;
+      return;
+    }
+
+    // Redirige según rol
+    if (authenticateUser.role === "patient") window.location.href = "/booking";
+    else if (authenticateUser.role === "psychologist") window.location.href = "/dashboard";
+  };
+
+  // Define texto del botón según rol
+  const buttonText = !authenticateUser
+    ? "Identifícate"
+    : authenticateUser.role === "patient"
+    ? "Reservar cita"
+    : authenticateUser.role === "psychologist"
+    ? "Agenda"
+    : "Identifícate";
+
   return (
     <section className="relative bg-gradient-to-br from-blue-50 to-blue-100 h-screen flex items-center">
-      {/* Fondo decorativo */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-10 right-10 w-64 h-64 bg-blue-300 opacity-20 blur-3xl rounded-full"></div>
         <div className="absolute bottom-10 left-10 w-80 h-80 bg-blue-500 opacity-10 blur-3xl rounded-full"></div>
       </div>
 
-      {/* Contenido */}
       <div className="relative max-w-4xl mx-auto px-6 text-center flex flex-col items-center">
         <h1 className="text-5xl md:text-6xl font-extrabold text-blue-900 leading-tight animate-fadeIn">
           Bienestar emocional con
@@ -23,12 +47,12 @@ export default function Hero() {
         </p>
 
         <div className="mt-8 flex gap-4 animate-fadeIn delay-300">
-          <a
-            href={`${import.meta.env.VITE_API_URL}/auth/google`} // apuntando a tu backend
+          <button
+            onClick={handleAuthClick}
             className="bg-blue-700 text-white px-6 py-3 rounded-xl shadow-md hover:bg-blue-800 transition"
           >
-            Reservar cita
-          </a>
+            {buttonText}
+          </button>
 
           <a
             href="#services"

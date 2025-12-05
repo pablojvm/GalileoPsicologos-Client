@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from "react";
-import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AuthContext } from "../context/auth.context";
@@ -51,7 +50,11 @@ export default function Booking() {
       if (!formData.fecha || !formData.psicologo) return;
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/appointment/availability?psychologist=${formData.psicologo}&date=${formData.fecha}`
+          `${
+            import.meta.env.VITE_API_URL
+          }/appointment/availability?psychologist=${formData.psicologo}&date=${
+            formData.fecha
+          }`
         );
         const data = await res.json();
         setHorasOcupadas(data); // ejemplo: ["10:30", "11:00"]
@@ -65,7 +68,10 @@ export default function Booking() {
 
   const horasDelDia = Array.from({ length: 12 }).flatMap((_, index) => {
     const hour = index + 10;
-    return [`${String(hour).padStart(2, "0")}:00`, `${String(hour).padStart(2, "0")}:30`];
+    return [
+      `${String(hour).padStart(2, "0")}:00`,
+      `${String(hour).padStart(2, "0")}:30`,
+    ];
   });
 
   const handleSubmit = async (e) => {
@@ -94,9 +100,14 @@ export default function Booking() {
 
   return (
     <section className="py-20 px-6 max-w-3xl mx-auto">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Reservar Cita</h1>
+      <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
+        Reservar Cita
+      </h1>
 
-      <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-2xl p-8 flex flex-col gap-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-lg rounded-2xl p-8 flex flex-col gap-6"
+      >
         {/* Psicólogo */}
         <label className="flex flex-col">
           Psicólogo
@@ -161,25 +172,42 @@ export default function Booking() {
             Hora
             <div className="grid grid-cols-4 gap-2 mt-2">
               {horasDelDia.map((hora) => {
+                const [hh, mm] = hora.split(":").map(Number);
                 const ocupada = horasOcupadas.some((ocupadaHora) => {
                   const [h, m] = ocupadaHora.split(":").map(Number);
-                  const [hh, mm] = hora.split(":").map(Number);
                   const ocupadaMin = h * 60 + m;
                   const horaMin = hh * 60 + mm;
                   return horaMin === ocupadaMin || horaMin === ocupadaMin + 30;
                 });
+                const ahora = new Date();
+                let horaPasada = false;
+                if (formData.fecha) {
+                  const fechaSeleccionada = new Date(formData.fecha);
+                  if (
+                    fechaSeleccionada.toDateString() === ahora.toDateString() &&
+                    (hh < ahora.getHours() ||
+                      (hh === ahora.getHours() && mm <= ahora.getMinutes()))
+                  ) {
+                    horaPasada = true;
+                  }
+                }
+                const deshabilitada = ocupada || horaPasada;
                 const seleccionada = hora === horaSeleccionada;
                 return (
                   <button
                     key={hora}
                     type="button"
-                    disabled={ocupada}
+                    disabled={deshabilitada}
                     onClick={() => setHoraSeleccionada(hora)}
                     className={`
-                      py-2 rounded-lg font-semibold transition
-                      ${ocupada ? "bg-gray-300 cursor-not-allowed line-through" : ""}
-                      ${seleccionada ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-700 hover:bg-blue-200"}
-                    `}
+          py-2 rounded-lg font-semibold transition
+          ${deshabilitada ? "bg-gray-300 cursor-not-allowed line-through" : ""}
+          ${
+            seleccionada
+              ? "bg-blue-600 text-white"
+              : "bg-blue-100 text-blue-700 hover:bg-blue-200"
+          }
+        `}
                   >
                     {hora}
                   </button>
@@ -189,7 +217,6 @@ export default function Booking() {
           </label>
         </div>
 
-        {/* Comentario */}
         <label className="flex flex-col">
           Comentario
           <textarea
@@ -202,7 +229,10 @@ export default function Booking() {
           />
         </label>
 
-        <button type="submit" className="bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition">
+        <button
+          type="submit"
+          className="bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition"
+        >
           Reservar cita
         </button>
       </form>
