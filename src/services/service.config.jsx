@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const service = axios.create({
-    baseURL: `${import.meta.env.VITE_SERVER_URL}/api`
+    baseURL: `${import.meta.env.VITE_SERVER_URL}/api` || "http://localhost:5005"
 })
 
 service.interceptors.request.use((config) =>{
