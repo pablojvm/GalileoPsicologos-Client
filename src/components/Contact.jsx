@@ -33,19 +33,27 @@ export default function ContactSection() {
     };
 
     try {
-      const res1 = await fetch("http://localhost:5005/api/email/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(emailToTeam),
-      });
+      const res1 = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/email/send-email`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(emailToTeam),
+        }
+      );
+
       const data1 = await res1.json();
       if (!data1.success) throw new Error("Error enviando correo al equipo");
 
-      const res2 = await fetch("http://localhost:5005/api/email/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(emailToClient),
-      });
+      const res2 = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/api/email/send-email`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(emailToTeam),
+        }
+      );
+
       const data2 = await res2.json();
       if (!data2.success) throw new Error("Error enviando correo al cliente");
 
@@ -58,11 +66,15 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="bg-gradient-to-b from-blue-50 to-white py-20 px-6">
+    <section
+      id="contact"
+      className="bg-gradient-to-b from-blue-50 to-white py-20 px-6"
+    >
       <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-4xl font-bold text-blue-900 mb-4">Contáctanos</h2>
         <p className="text-gray-600 mb-12 text-lg">
-          Estamos aquí para ayudarte. Escríbenos y te responderemos lo antes posible.
+          Estamos aquí para ayudarte. Escríbenos y te responderemos lo antes
+          posible.
         </p>
 
         <div className="grid md:grid-cols-2 gap-10">
@@ -72,7 +84,9 @@ export default function ContactSection() {
             className="bg-white p-8 rounded-3xl shadow-lg flex flex-col gap-5 transition hover:shadow-2xl"
           >
             <div className="text-left">
-              <label className="block text-gray-700 mb-2 font-medium">Nombre</label>
+              <label className="block text-gray-700 mb-2 font-medium">
+                Nombre
+              </label>
               <input
                 type="text"
                 name="nombre"
@@ -85,7 +99,9 @@ export default function ContactSection() {
             </div>
 
             <div className="text-left">
-              <label className="block text-gray-700 mb-2 font-medium">Email</label>
+              <label className="block text-gray-700 mb-2 font-medium">
+                Email
+              </label>
               <input
                 type="email"
                 name="email"
@@ -98,7 +114,9 @@ export default function ContactSection() {
             </div>
 
             <div className="text-left">
-              <label className="block text-gray-700 mb-2 font-medium">Mensaje</label>
+              <label className="block text-gray-700 mb-2 font-medium">
+                Mensaje
+              </label>
               <textarea
                 name="mensaje"
                 value={formData.mensaje}
@@ -120,7 +138,9 @@ export default function ContactSection() {
 
           {/* Información de contacto */}
           <div className="bg-white p-8 rounded-3xl shadow-lg flex flex-col justify-center gap-4 transition hover:shadow-2xl text-center">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">Información de contacto</h3>
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+              Información de contacto
+            </h3>
 
             <p className="text-gray-600 flex items-center gap-2">
               <span>📍</span> Avenida de Salobreña 36, Motril
