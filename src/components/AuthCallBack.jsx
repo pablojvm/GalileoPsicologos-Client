@@ -1,21 +1,24 @@
-// src/pages/AuthCallback.jsx
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useContext } from "react";
+import { AuthContext } from "../context/auth.context";
 
 export default function AuthCallback() {
-  const navigate = useNavigate();
+  const { verifyToken } = useContext(AuthContext);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
+    // Leer token del hash
+    const hash = window.location.hash;
+    const token = hash.replace("#token=", "");
 
     if (token) {
       localStorage.setItem("authToken", token);
-      navigate("/", { replace: true }); // Redirige a la página inicial
-    } else {
-      navigate("/login", { replace: true });
-    }
-  }, [navigate]);
 
-  return <div>Autenticando...</div>;
+      // 🔥 FORZAR actualización del context
+      verifyToken();
+    }
+
+    // Redirigir donde quieras
+    window.location.href = "/";
+  }, []);
+
+  return <div>Procesando autenticación...</div>;
 }

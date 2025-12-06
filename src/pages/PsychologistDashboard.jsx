@@ -7,48 +7,81 @@ export default function PsychologistDashboard() {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-  mySchedule();
-}, []);
+    mySchedule();
+  }, []);
 
-const mySchedule = async () => {
-  try {
-    const res = await service.get("/appointment/my-schedule");
-    console.log("Mis citas:", res.data);
-    setAppointments(res.data);
-  } catch (err) {
-    console.error("Error cargando agenda:", err);
-  }
-};
+  const mySchedule = async () => {
+    try {
+      const res = await service.get("/appointment/my-schedule");
+      console.log("Mis citas:", res.data);
 
+      // Filtrar citas futuras
+      const now = new Date();
+      const upcoming = res.data.filter(app => new Date(app.date) >= now);
+      setAppointments(upcoming);
+    } catch (err) {
+      console.error("Error cargando agenda:", err);
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case "pendiente":
+        return "bg-yellow-100 text-yellow-800";
+      case "confirmada":
+        return "bg-green-100 text-green-800";
+      case "cancelada":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  const formatDateTime = (dateStr) => {
+    const date = new Date(dateStr);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    })}`;
+  };
 
   return (
-    <section className="py-10 px-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Mi Agenda</h1>
+    <section className="pt-32 pb-12 px-6 max-w-5xl mx-auto">
+      <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+        Mi Agenda
+      </h1>
+
       {appointments.length === 0 ? (
-        <p>No tienes citas programadas.</p>
+        <p className="text-center text-gray-600">
+          No tienes citas programadas.
+        </p>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid md:grid-cols-2 gap-6">
           {appointments.map((app) => (
             <div
               key={app._id}
-              className="p-4 border rounded-lg flex justify-between items-center"
+              className="p-6 border rounded-2xl shadow-md hover:shadow-lg transition flex flex-col justify-between"
             >
-              <div>
-                <p>
-                  <span className="font-semibold">Paciente:</span>{" "}
-                  {app.patient.username}
+              <div className="mb-4">
+                <p className="text-gray-800 font-semibold mb-1">
+                  Paciente: <span className="font-normal">{app.patient.username}</span>
                 </p>
-                <p>
-                  <span className="font-semibold">Fecha:</span>{" "}
-                  {new Date(app.date).toLocaleString()}
+                <p className="text-gray-800 font-semibold mb-1">
+                  Fecha:{" "}
+                  <span className="font-normal">{formatDateTime(app.date)}</span>
                 </p>
-                <p>
-                  <span className="font-semibold">Servicio:</span> {app.service}
-                </p>
-                <p>
-                  <span className="font-semibold">Estado:</span> {app.status}
+                <p className="text-gray-800 font-semibold mb-1">
+                  Servicio: <span className="font-normal">{app.service}</span>
                 </p>
               </div>
+
+              <span
+                className={`inline-block px-3 py-1 text-sm font-semibold rounded-full ${getStatusColor(
+                  app.status
+                )}`}
+              >
+                {app.status}
+              </span>
             </div>
           ))}
         </div>

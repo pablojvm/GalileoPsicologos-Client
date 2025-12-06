@@ -14,6 +14,23 @@ export default function Booking() {
 
   const navigate = useNavigate();
 
+  // =============================
+  // 🚫 Lista de festivos
+  // =============================
+  const holidays = [
+    "2026-01-01",
+    "2026-01-06",
+    "2026-03-19",
+    "2026-05-01",
+    "2026-08-15",
+    "2026-10-12",
+    "2026-11-01",
+    "2026-12-06",
+    "2026-12-08",
+    "2026-12-25",
+    "2025-12-25",
+  ].map((d) => new Date(d));
+
   // Token desde URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -57,7 +74,7 @@ export default function Booking() {
           }`
         );
         const data = await res.json();
-        setHorasOcupadas(data); // ejemplo: ["10:30", "11:00"]
+        setHorasOcupadas(data);
         setHoraSeleccionada(null);
       } catch (err) {
         console.error("Error cargando disponibilidad:", err);
@@ -165,6 +182,16 @@ export default function Booking() {
               className="mt-2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               dateFormat="dd/MM/yyyy"
               required
+              filterDate={(date) => {
+                const day = date.getDay(); // 0 domingo - 6 sábado
+                const isWeekend = day === 0 || day === 6;
+
+                const isHoliday = holidays.some(
+                  (h) => h.toDateString() === date.toDateString()
+                );
+
+                return !isWeekend && !isHoliday;
+              }}
             />
           </label>
 
@@ -173,16 +200,20 @@ export default function Booking() {
             <div className="grid grid-cols-4 gap-2 mt-2">
               {horasDelDia.map((hora) => {
                 const [hh, mm] = hora.split(":").map(Number);
+
                 const ocupada = horasOcupadas.some((ocupadaHora) => {
                   const [h, m] = ocupadaHora.split(":").map(Number);
                   const ocupadaMin = h * 60 + m;
                   const horaMin = hh * 60 + mm;
                   return horaMin === ocupadaMin || horaMin === ocupadaMin + 30;
                 });
+
                 const ahora = new Date();
                 let horaPasada = false;
+
                 if (formData.fecha) {
                   const fechaSeleccionada = new Date(formData.fecha);
+
                   if (
                     fechaSeleccionada.toDateString() === ahora.toDateString() &&
                     (hh < ahora.getHours() ||
@@ -191,8 +222,10 @@ export default function Booking() {
                     horaPasada = true;
                   }
                 }
+
                 const deshabilitada = ocupada || horaPasada;
                 const seleccionada = hora === horaSeleccionada;
+
                 return (
                   <button
                     key={hora}
@@ -200,14 +233,18 @@ export default function Booking() {
                     disabled={deshabilitada}
                     onClick={() => setHoraSeleccionada(hora)}
                     className={`
-          py-2 rounded-lg font-semibold transition
-          ${deshabilitada ? "bg-gray-300 cursor-not-allowed line-through" : ""}
-          ${
-            seleccionada
-              ? "bg-blue-600 text-white"
-              : "bg-blue-100 text-blue-700 hover:bg-blue-200"
-          }
-        `}
+                      py-2 rounded-lg font-semibold transition
+                      ${
+                        deshabilitada
+                          ? "bg-gray-300 cursor-not-allowed line-through"
+                          : ""
+                      }
+                      ${
+                        seleccionada
+                          ? "bg-blue-600 text-white"
+                          : "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                      }
+                    `}
                   >
                     {hora}
                   </button>
