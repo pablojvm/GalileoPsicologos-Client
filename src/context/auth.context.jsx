@@ -6,7 +6,7 @@ const AuthContext = createContext();
 function AuthWrapper({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedUserId, setLoggedUserId] = useState(null);
-  const [authenticateUser, setAuthenticateUser] = useState(null); // contiene _id, role, username
+  const [authenticateUser, setAuthenticateUser] = useState(null);
   const [isValidatingToken, setIsValidatingToken] = useState(true);
 
   const authenticateUserFromToken = async () => {
@@ -30,7 +30,7 @@ function AuthWrapper({ children }) {
 
       setIsLoggedIn(true);
       setLoggedUserId(response.data.payload._id);
-      setAuthenticateUser(response.data.payload); // ahora tenemos role y username
+      setAuthenticateUser(response.data.payload);
       setIsValidatingToken(false);
     } catch (error) {
       console.error("Token inválido:", error);
@@ -50,12 +50,11 @@ function AuthWrapper({ children }) {
     isLoggedIn,
     loggedUserId,
     authenticateUser,
-    setAuthenticateUser, // importante para poder actualizar el contexto al hacer logout
+    setAuthenticateUser,
     setLoggedUserId,
     authenticateUserFromToken,
   };
 
-  // Bloque de validación con animación simple
   if (isValidatingToken) {
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-blue-50">

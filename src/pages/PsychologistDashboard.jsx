@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import service from "../services/service.config";
 
-export default function PsychologistDashboard() {
+function PsychologistDashboard() {
   const { loggedUserId } = useContext(AuthContext);
   const [appointments, setAppointments] = useState([]);
 
@@ -15,7 +15,6 @@ export default function PsychologistDashboard() {
       const res = await service.get("/appointment/my-schedule");
       console.log("Mis citas:", res.data);
 
-      // Filtrar citas futuras
       const now = new Date();
       const upcoming = res.data.filter(app => new Date(app.date) >= now);
       setAppointments(upcoming);
@@ -89,3 +88,5 @@ export default function PsychologistDashboard() {
     </section>
   );
 }
+
+export default PsychologistDashboard

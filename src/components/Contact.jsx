@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function ContactSection() {
+function ContactSection() {
   const [formData, setFormData] = useState({
     nombre: "",
     email: "",
@@ -15,7 +15,7 @@ export default function ContactSection() {
     e.preventDefault();
 
     const emailToTeam = {
-      to: "galileopsi@gmail.com, mvillarmoron@gmail.com",
+      to: ["galileopsi@gmail.com, mvillarmoron@gmail.com"],
       subject: `Nuevo mensaje de ${formData.nombre} para consulta`,
       message: `
         <p><strong>Nombre:</strong> ${formData.nombre}</p>
@@ -50,7 +50,7 @@ export default function ContactSection() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(emailToTeam),
+          body: JSON.stringify(emailToClient),
         }
       );
 
@@ -78,7 +78,6 @@ export default function ContactSection() {
         </p>
 
         <div className="grid md:grid-cols-2 gap-10">
-          {/* Formulario */}
           <form
             onSubmit={handleSubmit}
             className="bg-white p-8 rounded-3xl shadow-lg flex flex-col gap-5 transition hover:shadow-2xl"
@@ -136,7 +135,6 @@ export default function ContactSection() {
             </button>
           </form>
 
-          {/* Información de contacto */}
           <div className="bg-white p-8 rounded-3xl shadow-lg flex flex-col justify-center gap-4 transition hover:shadow-2xl text-center">
             <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
               Información de contacto
@@ -155,11 +153,14 @@ export default function ContactSection() {
             </p>
 
             <p className="text-gray-600 flex items-center gap-2">
-              <span>🕒</span> Lunes – Viernes 10:00–21:00
+              <span>🕒</span> Lunes – Viernes 10:00–14:00/ 17:00-20:00
             </p>
+            <p> Sabado - 10:00-13:00</p>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+export default ContactSection

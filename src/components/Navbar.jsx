@@ -7,9 +7,8 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Detecta token después de Google y actualiza el estado sin refrescar
   useEffect(() => {
-    const hash = window.location.hash; // p.ej: #token=eyJhbGci...
+    const hash = window.location.hash;
     const match = hash.match(/token=([^&]+)/);
 
     if (match) {
@@ -21,7 +20,6 @@ function Navbar() {
     }
   }, []);
 
-  // Cambia fondo/sombra al hacer scroll
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -44,7 +42,7 @@ function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
+        
           <Link
             to="/"
             className="text-xl font-bold text-gray-700 flex items-center gap-2"
@@ -53,7 +51,6 @@ function Navbar() {
             Galileo Psicólogos
           </Link>
 
-          {/* Botón hamburger móvil */}
           <div className="sm:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -87,7 +84,6 @@ function Navbar() {
             </button>
           </div>
 
-          {/* Menú escritorio */}
           <ul className="hidden sm:flex gap-6 items-center text-gray-700">
             <li>
               <Link smooth to="/#services" className="hover:text-blue-500 transition">
@@ -137,7 +133,6 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Menú móvil */}
       {isOpen && (
         <div className="sm:hidden bg-white shadow-lg">
           <ul className="px-2 pt-2 pb-3 space-y-1">

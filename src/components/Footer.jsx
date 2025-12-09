@@ -5,7 +5,6 @@ export default function Footer() {
   return (
     <footer className="bg-blue-900 text-white py-12 px-6">
       <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-center md:text-left">
-        {/* Sección de contacto */}
         <div>
           <h3 className="text-xl font-bold mb-4">Contacto</h3>
           <p>📍 Avenida de Salobreña 36, Motril</p>
@@ -13,7 +12,6 @@ export default function Footer() {
           <p>✉️ galileopsi@gmail.com / mvillarmoron@gmail.com</p>
         </div>
 
-        {/* Enlaces rápidos */}
         <div>
           <h3 className="text-xl font-bold mb-4">Enlaces</h3>
           <ul className="space-y-2">

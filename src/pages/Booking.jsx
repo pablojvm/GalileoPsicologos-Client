@@ -5,18 +5,14 @@ import { AuthContext } from "../context/auth.context";
 import service from "../services/service.config";
 import { useNavigate } from "react-router-dom";
 
-export default function Booking() {
+function Booking() {
   const { loggedUserId, setLoggedUserId } = useContext(AuthContext);
   const [formData, setFormData] = useState({});
   const [psychologists, setPsychologists] = useState([]);
   const [horasOcupadas, setHorasOcupadas] = useState([]);
   const [horaSeleccionada, setHoraSeleccionada] = useState(null);
-
   const navigate = useNavigate();
 
-  // =============================
-  // 🚫 Lista de festivos
-  // =============================
   const holidays = [
     "2026-01-01",
     "2026-01-06",
@@ -31,11 +27,9 @@ export default function Booking() {
     "2025-12-25",
   ].map((d) => new Date(d));
 
-  // Token desde URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
-
     if (token) {
       localStorage.setItem("authToken", token);
       const payload = JSON.parse(atob(token.split(".")[1]));
@@ -44,7 +38,6 @@ export default function Booking() {
     }
   }, [navigate, setLoggedUserId]);
 
-  // Obtener psicólogos
   useEffect(() => {
     const getPsychologists = async () => {
       try {
@@ -61,51 +54,84 @@ export default function Booking() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Cargar horas ocupadas al cambiar psicólogo o fecha
-  useEffect(() => {
-    const cargarHorasOcupadas = async () => {
-      if (!formData.fecha || !formData.psicologo) return;
-      try {
-        const res = await fetch(
-          `${
-            import.meta.env.VITE_API_URL
-          }/appointment/availability?psychologist=${formData.psicologo}&date=${
-            formData.fecha
-          }`
-        );
-        const data = await res.json();
-        setHorasOcupadas(data);
-        setHoraSeleccionada(null);
-      } catch (err) {
-        console.error("Error cargando disponibilidad:", err);
-      }
-    };
-    cargarHorasOcupadas();
-  }, [formData.fecha, formData.psicologo]);
+  const cargarHorasOcupadas = async () => {
+    if (!formData.fecha || !formData.psicologo) return;
 
-  const horasDelDia = Array.from({ length: 12 }).flatMap((_, index) => {
-    const hour = index + 10;
-    return [
-      `${String(hour).padStart(2, "0")}:00`,
-      `${String(hour).padStart(2, "0")}:30`,
-    ];
-  });
+    try {
+      const fecha = formData.fecha;
+      const fechaStr = `${fecha.getFullYear()}/${String(
+        fecha.getMonth() + 1
+      ).padStart(2, "0")}/${String(fecha.getDate()).padStart(2, "0")}`;
+
+      const res = await service.get(
+        `/appointment/availability?psychologist=${formData.psicologo}&date=${fechaStr}`
+      );
+
+      setHorasOcupadas(res.data);
+      setHoraSeleccionada(null);
+    } catch (err) {
+      console.error("Error cargando disponibilidad:", err);
+    }
+  };
+
+  useEffect(() => {
+    cargarHorasOcupadas();
+  }, [formData.psicologo, formData.fecha]);
+
+  const obtenerHorasDisponibles = (fecha) => {
+    if (!fecha) return [];
+    const day = fecha.getDay();
+    let bloques = [];
+
+    if (day >= 1 && day <= 4)
+      bloques = [
+        [10, 14],
+        [17, 20],
+      ];
+    else if (day === 5 || day === 6) bloques = [[10, 13]];
+
+    const horas = [];
+
+    bloques.forEach(([inicio, fin]) => {
+      for (let h = inicio; h < fin; h++) {
+        horas.push(`${String(h).padStart(2, "0")}:00`);
+        horas.push(`${String(h).padStart(2, "0")}:30`);
+      }
+    });
+
+    const horasFiltradas = horas.filter((hora) => {
+      const [hh, mm] = hora.split(":").map(Number);
+
+      const bloque = bloques.find(([inicio, fin]) => hh >= inicio && hh < fin);
+      if (!bloque) return true;
+
+      const [inicio, fin] = bloque;
+
+      if (hh === fin - 1 && mm === 30) return false;
+
+      return true;
+    });
+
+    return horasFiltradas;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!horaSeleccionada) return alert("Debes seleccionar una hora");
+    if (!formData.fecha) return alert("Debes seleccionar una fecha");
 
-    const fechaCompleta = new Date(formData.fecha);
-    const [horas, minutos] = horaSeleccionada.split(":");
-    fechaCompleta.setHours(Number(horas));
-    fechaCompleta.setMinutes(Number(minutos));
+    const fecha = formData.fecha;
+    const fechaFormateada = `${fecha.getFullYear()}/${String(
+      fecha.getMonth() + 1
+    ).padStart(2, "0")}/${String(fecha.getDate()).padStart(2, "0")}`;
 
     try {
       await service.post("/appointment", {
         psychologist: formData.psicologo,
         patient: loggedUserId,
         service: formData.service,
-        date: fechaCompleta,
+        date: fechaFormateada,
+        time: horaSeleccionada,
         coment: formData.coment,
       });
       alert("¡Cita reservada correctamente!");
@@ -125,7 +151,6 @@ export default function Booking() {
         onSubmit={handleSubmit}
         className="bg-white shadow-lg rounded-2xl p-8 flex flex-col gap-6"
       >
-        {/* Psicólogo */}
         <label className="flex flex-col">
           Psicólogo
           <select
@@ -141,13 +166,12 @@ export default function Booking() {
             <option value="">Seleccione un profesional</option>
             {psychologists.map((psico) => (
               <option key={psico._id} value={psico._id}>
-                {psico.name}
+                {psico.username}
               </option>
             ))}
           </select>
         </label>
 
-        {/* Servicio */}
         <label className="flex flex-col">
           Servicio
           <select
@@ -158,16 +182,15 @@ export default function Booking() {
             required
           >
             <option value="">Selecciona un servicio</option>
-            <option value="Terapia adulto">Terapia adulto</option>
-            <option value="Terapia de pareja">Terapia de pareja</option>
-            <option value="Terapia adolescente">Terapia adolescente</option>
-            <option value="Terapia niño">Terapia niño</option>
+            <option value="Terapia adulto">Adultos</option>
+            <option value="Terapia de pareja">Parejas</option>
+            <option value="Terapia adolescente">Adolescentes</option>
+            <option value="Terapia niño">Niños</option>
             <option value="Altas capacidades">Altas capacidades</option>
-            <option value="Terapia online">Terapia online</option>
+            <option value="Terapia online">Online</option>
           </select>
         </label>
 
-        {/* Fecha y hora */}
         <div className="flex flex-col md:flex-row gap-6">
           <label className="flex flex-col flex-1">
             Fecha
@@ -183,14 +206,12 @@ export default function Booking() {
               dateFormat="dd/MM/yyyy"
               required
               filterDate={(date) => {
-                const day = date.getDay(); // 0 domingo - 6 sábado
-                const isWeekend = day === 0 || day === 6;
-
+                const day = date.getDay();
+                const isSunday = day === 0;
                 const isHoliday = holidays.some(
                   (h) => h.toDateString() === date.toDateString()
                 );
-
-                return !isWeekend && !isHoliday;
+                return !isSunday && !isHoliday;
               }}
             />
           </label>
@@ -198,20 +219,27 @@ export default function Booking() {
           <label className="flex flex-col flex-1">
             Hora
             <div className="grid grid-cols-4 gap-2 mt-2">
-              {horasDelDia.map((hora) => {
-                const [hh, mm] = hora.split(":").map(Number);
+              {!formData.fecha && (
+                <div className="col-span-4 text-center text-gray-500 py-4">
+                  Selecciona una fecha para ver las horas disponibles
+                </div>
+              )}
 
-                const ocupada = horasOcupadas.some((ocupadaHora) => {
-                  const [h, m] = ocupadaHora.split(":").map(Number);
-                  const ocupadaMin = h * 60 + m;
-                  const horaMin = hh * 60 + mm;
-                  return horaMin === ocupadaMin || horaMin === ocupadaMin + 30;
-                });
+              {formData.fecha &&
+                obtenerHorasDisponibles(formData.fecha).map((hora) => {
+                  const [hh, mm] = hora.split(":").map(Number);
 
-                const ahora = new Date();
-                let horaPasada = false;
+                  const ocupada = horasOcupadas.some((ocupadaHora) => {
+                    const [h, m] = ocupadaHora.split(":").map(Number);
+                    const ocupadaMin = h * 60 + m;
+                    const horaMin = hh * 60 + mm;
+                    return (
+                      horaMin === ocupadaMin || horaMin === ocupadaMin + 30
+                    );
+                  });
 
-                if (formData.fecha) {
+                  const ahora = new Date();
+                  let horaPasada = false;
                   const fechaSeleccionada = new Date(formData.fecha);
 
                   if (
@@ -221,35 +249,34 @@ export default function Booking() {
                   ) {
                     horaPasada = true;
                   }
-                }
 
-                const deshabilitada = ocupada || horaPasada;
-                const seleccionada = hora === horaSeleccionada;
+                  const deshabilitada = ocupada || horaPasada;
+                  const seleccionada = hora === horaSeleccionada;
 
-                return (
-                  <button
-                    key={hora}
-                    type="button"
-                    disabled={deshabilitada}
-                    onClick={() => setHoraSeleccionada(hora)}
-                    className={`
-                      py-2 rounded-lg font-semibold transition
-                      ${
-                        deshabilitada
-                          ? "bg-gray-300 cursor-not-allowed line-through"
-                          : ""
-                      }
-                      ${
-                        seleccionada
-                          ? "bg-blue-600 text-white"
-                          : "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                      }
-                    `}
-                  >
-                    {hora}
-                  </button>
-                );
-              })}
+                  return (
+                    <button
+                      key={hora}
+                      type="button"
+                      disabled={deshabilitada}
+                      onClick={() => setHoraSeleccionada(hora)}
+                      className={`
+                        py-2 rounded-lg font-semibold transition
+                        ${
+                          deshabilitada
+                            ? "bg-gray-300 cursor-not-allowed line-through"
+                            : ""
+                        }
+                        ${
+                          seleccionada
+                            ? "bg-blue-600 text-white"
+                            : "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                        }
+                      `}
+                    >
+                      {hora}
+                    </button>
+                  );
+                })}
             </div>
           </label>
         </div>
@@ -276,3 +303,5 @@ export default function Booking() {
     </section>
   );
 }
+
+export default Booking;

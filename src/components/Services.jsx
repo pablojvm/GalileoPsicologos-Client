@@ -3,7 +3,7 @@ import React from "react";
 const services = [
   { name: "Adultos", duration: "60 min", pic: "/individual.jpeg" },
   { name: "Parejas", duration: "60 min", pic: "/pareja.jpeg" },
-  { name: "Adicciones", duration: "60 min", pic: "/adicciones.jpeg" },
+  { name: "Dependencias", duration: "60 min", pic: "/adicciones.jpeg" },
   { name: "Adolescentes", duration: "60 min", pic: "/adolescente.jpeg" },
   { name: "Altas capacidades", duration: "60 min", pic: "/capacidades.jpeg" },
   { name: "Sesión Online", duration: "60 min", pic: "/online.jpeg" },

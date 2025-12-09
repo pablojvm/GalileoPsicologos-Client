@@ -24,7 +24,7 @@ export default function Hero() {
 
   return (
     <section className="relative bg-gradient-to-br from-blue-50 to-blue-100 h-screen flex items-center">
-      {/* Fondos decorativos */}
+
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-10 right-10 w-64 h-64 bg-blue-300 opacity-20 blur-3xl rounded-full animate-pulse-slow"></div>
         <div className="absolute bottom-10 left-10 w-80 h-80 bg-blue-500 opacity-10 blur-3xl rounded-full animate-pulse-slow delay-200"></div>
@@ -39,7 +39,7 @@ export default function Hero() {
         <p className="text-lg md:text-xl text-blue-700 mt-6 max-w-3xl leading-relaxed animate-fadeIn delay-200">
           Te acompañamos en tu proceso de sanación de manera profesional con un enfoque humano. Atendemos con cercanía
           y experiencia: <span className="font-semibold">Antonio y Marta</span>,
-          psicólogos especializados en ansiedad, autoestima, terapia de pareja
+          psicólogos especializados en ansiedad, autoestima, parejas, mindfullness, autoayuda
           y bienestar emocional.
         </p>
 

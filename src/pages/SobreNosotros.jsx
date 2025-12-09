@@ -79,7 +79,6 @@ function SobreNosotros() {
         </div>
       </section>
 
-      {/* Sección Profesionales */}
       <section className="bg-white py-20 px-6">
         <div className="max-w-6xl mx-auto space-y-12 text-center">
           <h2 className="text-3xl font-bold text-gray-800">Nuestros Profesionales</h2>
@@ -101,7 +100,6 @@ function SobreNosotros() {
         </div>
       </section>
 
-      {/* Sección Reseñas */}
       <section className="bg-blue-50 py-20 px-6">
         <div className="max-w-6xl mx-auto space-y-12 text-center">
           <h2 className="text-3xl font-bold text-blue-900">Reseñas de Google</h2>
@@ -121,7 +119,6 @@ function SobreNosotros() {
         </div>
       </section>
 
-      {/* Sección Contacto */}
       <section className="bg-white py-20 px-6 text-center">
         <h2 className="text-3xl font-semibold text-gray-800 mb-4">¿Quieres saber más o empezar terapia?</h2>
         <p className="text-gray-600 mb-8">Estamos aquí para ayudarte. Da el primer paso hoy.</p>
