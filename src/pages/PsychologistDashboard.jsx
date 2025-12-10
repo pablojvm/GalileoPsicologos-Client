@@ -36,14 +36,6 @@ function PsychologistDashboard() {
     }
   };
 
-  const formatDateTime = (dateStr) => {
-    const date = new Date(dateStr);
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    })}`;
-  };
-
   return (
     <section className="pt-32 pb-12 px-6 max-w-5xl mx-auto">
       <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">
@@ -67,7 +59,7 @@ function PsychologistDashboard() {
                 </p>
                 <p className="text-gray-800 font-semibold mb-1">
                   Fecha:{" "}
-                  <span className="font-normal">{formatDateTime(app.date)}</span>
+                  <span className="font-normal">{app.date}-{app.time}</span>
                 </p>
                 <p className="text-gray-800 font-semibold mb-1">
                   Servicio: <span className="font-normal">{app.service}</span>
