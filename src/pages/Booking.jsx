@@ -134,7 +134,7 @@ function Booking() {
         time: horaSeleccionada,
         coment: formData.coment,
       });
-      alert("¡Cita reservada correctamente!");
+      alert("¡Solicitud de cita enviada con exito. Nuestro quipo gestionará tu cita lo antes posible");
     } catch (error) {
       console.error("Error creando cita:", error);
       alert("Error al crear la cita");
