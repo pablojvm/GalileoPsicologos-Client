@@ -9,14 +9,14 @@ function SobreNosotros() {
       rol: "Psicólogo",
       descripcion:
         "Especializado en ansiedad, autoestima y crecimiento personal. Su enfoque es cercano, práctico y orientado a resultados. Cuenta con más de 40 años de experiencia acompañando a jóvenes y adultos.",
-      imagen: "/antonio.jpeg",
+      imagen: "/antonio.jpg",
     },
     {
       nombre: "Marta Villar Morón",
       rol: "Psicóloga",
       descripcion:
-        "Marta trabaja desde una perspectiva integradora, combinando herramientas de carácter cognitivo-conductual y emocional. Experta en adicciones, adolescentes, empoderamiento y altas capacidades.",
-      imagen: "/marta.jpeg",
+        "Marta trabaja desde una perspectiva integradora, combinando herramientas de carácter cognitivo-conductual y emocional. Experta en dependencias, adolescentes, empoderamiento y altas capacidades.",
+      imagen: "/marta.jpg",
     },
   ];
 

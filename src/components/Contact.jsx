@@ -135,27 +135,35 @@ function ContactSection() {
             </button>
           </form>
 
-          <div className="bg-white p-8 rounded-3xl shadow-lg flex flex-col justify-center gap-4 transition hover:shadow-2xl text-center">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+          <div className="bg-white p-8 rounded-3xl shadow-lg flex flex-col gap-6 transition hover:shadow-2xl text-center border border-gray-100">
+            <h3 className="text-3xl font-semibold text-gray-800 mb-2">
               Información de contacto
             </h3>
 
-            <p className="text-gray-600 flex items-center gap-2">
-              <span>📍</span> Avenida de Salobreña 36, Motril
-            </p>
+            <div className="flex flex-col gap-4 text-gray-600 text-lg">
+              <p className="flex items-center justify-center gap-3">
+                <span className="text-2xl">📍</span>
+                Avenida de Salobreña 36, Motril
+              </p>
 
-            <p className="text-gray-600 flex items-center gap-2">
-              <span>📞</span> +34 696 633 362 / +34 616 833 939
-            </p>
+              <p className="flex items-center justify-center gap-3">
+                <span className="text-2xl">📞</span>
+                +34 696 633 362 / +34 616 833 939
+              </p>
 
-            <p className="text-gray-600 flex items-center gap-2">
-              <span>✉️</span> galileopsi@gmail.com / mvillarmoron@gmail.com
-            </p>
+              <p className="flex items-center justify-center gap-3">
+                <span className="text-2xl">✉️</span>
+                galileopsi@gmail.com / mvillarmoron@gmail.com
+              </p>
 
-            <p className="text-gray-600 flex items-center gap-2">
-              <span>🕒</span> Lunes – Viernes 10:00–14:00/ 17:00-20:00
-            </p>
-            <p> Sabado - 10:00-13:00</p>
+              <div className="flex flex-col items-center gap-1">
+                <p className="flex items-center justify-center gap-3">
+                  <span className="text-2xl">🕒</span>
+                  Lunes – Jueves · 10:00–14:00 / 17:00–20:00
+                </p>
+                <p className="text-gray-600">Viernes – Sábado · 10:00–13:00</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -163,4 +171,4 @@ function ContactSection() {
   );
 }
 
-export default ContactSection
+export default ContactSection;
