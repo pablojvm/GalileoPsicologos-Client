@@ -15,7 +15,7 @@ function ContactSection() {
     e.preventDefault();
 
     const emailToTeam = {
-      to: ["galileopsi@gmail.com, mvillarmoron@gmail.com"],
+      to: ["galileopsi@gmail.com", "mvillarmoron@gmail.com"],
       subject: `Nuevo mensaje de ${formData.nombre} para consulta`,
       message: `
         <p><strong>Nombre:</strong> ${formData.nombre}</p>
