@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import service from "../services/service.config";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../context/auth.context";
 
 function SobreNosotros() {
+  const { isLoggedIn } = useContext(AuthContext);
   const psicologos = [
     {
       nombre: "Antonio Villar Rodríguez",
@@ -41,7 +43,13 @@ function SobreNosotros() {
         <div className="max-w-6xl mx-auto space-y-12 text-center">
           <h1 className="text-5xl font-bold text-blue-900">Sobre Nosotros</h1>
           <p className="text-lg text-blue-800 max-w-3xl mx-auto">
-            En <span className="font-semibold text-blue-600">Galileo Psicólogos</span> trabajamos para ayudarte a recuperar tu bienestar emocional. Nuestro equipo de profesionales ofrece un enfoque cercano, humano y basado en la evidencia.
+            En{" "}
+            <span className="font-semibold text-blue-600">
+              Galileo Psicólogos
+            </span>{" "}
+            trabajamos para ayudarte a recuperar tu bienestar emocional. Nuestro
+            equipo de profesionales ofrece un enfoque cercano, humano y basado
+            en la evidencia.
           </p>
         </div>
       </section>
@@ -49,29 +57,55 @@ function SobreNosotros() {
       <section className="bg-white py-20 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-4">
-            <h2 className="text-3xl font-semibold text-gray-800">Nuestro Enfoque</h2>
+            <h2 className="text-3xl font-semibold text-gray-800">
+              Nuestro Enfoque
+            </h2>
             <p className="text-gray-600 leading-relaxed">
-              Somos un equipo de psicólogos comprometidos con una práctica ética, actualizada y centrada en cada persona. Creemos en una psicología accesible, moderna y adaptada a tu ritmo.
+              Somos un equipo de psicólogos comprometidos con una práctica
+              ética, actualizada y centrada en cada persona. Creemos en una
+              psicología accesible, moderna y adaptada a tu ritmo.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Apostamos por métodos terapéuticos basados en ciencia, integrando técnicas de las corrientes cognitivo-conductual, humanista y terapia breve centrada en soluciones.
+              Apostamos por métodos terapéuticos basados en ciencia, integrando
+              técnicas de las corrientes cognitivo-conductual, humanista y
+              terapia breve centrada en soluciones.
             </p>
           </div>
-          <img src="/despacho.jpeg" alt="Equipo de psicólogos" className="w-full rounded-3xl shadow-lg" />
+          <img
+            src="/despacho.jpeg"
+            alt="Equipo de psicólogos"
+            className="w-full rounded-3xl shadow-lg"
+          />
         </div>
       </section>
 
       <section className="bg-blue-50 py-20 px-6">
         <div className="max-w-6xl mx-auto space-y-12 text-center">
-          <h2 className="text-3xl font-semibold text-blue-900">Nuestros Valores</h2>
+          <h2 className="text-3xl font-semibold text-blue-900">
+            Nuestros Valores
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: "Cercanía", text: "Apostamos por un trato humano, cálido y respetuoso. Queremos que te sientas escuchado desde el primer minuto." },
-              { title: "Profesionalidad", text: "Nuestro equipo está formado por especialistas actualizados en las últimas técnicas basadas en evidencia científica." },
-              { title: "Compromiso", text: "Acompañamos a cada persona con dedicación, adaptando el proceso a sus necesidades y objetivos." },
+              {
+                title: "Cercanía",
+                text: "Apostamos por un trato humano, cálido y respetuoso. Queremos que te sientas escuchado desde el primer minuto.",
+              },
+              {
+                title: "Profesionalidad",
+                text: "Nuestro equipo está formado por especialistas actualizados en las últimas técnicas basadas en evidencia científica.",
+              },
+              {
+                title: "Compromiso",
+                text: "Acompañamos a cada persona con dedicación, adaptando el proceso a sus necesidades y objetivos.",
+              },
             ].map((valor) => (
-              <div key={valor.title} className="bg-white p-8 rounded-2xl shadow hover:shadow-lg transition text-center">
-                <h3 className="text-xl font-bold text-blue-600 mb-3">{valor.title}</h3>
+              <div
+                key={valor.title}
+                className="bg-white p-8 rounded-2xl shadow hover:shadow-lg transition text-center"
+              >
+                <h3 className="text-xl font-bold text-blue-600 mb-3">
+                  {valor.title}
+                </h3>
                 <p className="text-gray-600">{valor.text}</p>
               </div>
             ))}
@@ -81,18 +115,43 @@ function SobreNosotros() {
 
       <section className="bg-white py-20 px-6">
         <div className="max-w-6xl mx-auto space-y-12 text-center">
-          <h2 className="text-3xl font-bold text-gray-800">Nuestros Profesionales</h2>
+          <h2 className="text-3xl font-bold text-gray-800">
+            Nuestros Profesionales
+          </h2>
           <div className="grid md:grid-cols-2 gap-10">
             {psicologos.map((p) => (
-              <div key={p.nombre} className="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition">
-                <img src={p.imagen} alt={p.nombre} className="w-full h-64 object-cover" />
+              <div
+                key={p.nombre}
+                className="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition"
+              >
+                <img
+                  src={p.imagen}
+                  alt={p.nombre}
+                  className="w-full h-64 object-cover"
+                />
                 <div className="p-6 space-y-4">
-                  <h3 className="text-2xl font-semibold text-gray-800">{p.nombre}</h3>
+                  <h3 className="text-2xl font-semibold text-gray-800">
+                    {p.nombre}
+                  </h3>
                   <p className="text-blue-600 font-medium">{p.rol}</p>
-                  <p className="text-gray-600 leading-relaxed">{p.descripcion}</p>
-                  <Link to="/booking" className="block w-full bg-blue-600 text-white py-2 rounded-xl text-center hover:bg-blue-700 transition">
-                    Reservar cita
-                  </Link>
+                  <p className="text-gray-600 leading-relaxed">
+                    {p.descripcion}
+                  </p>
+                  {isLoggedIn ? (
+                    <Link
+                      to="/booking"
+                      className="block w-full bg-blue-600 text-white py-2 rounded-xl text-center hover:bg-blue-700 transition"
+                    >
+                      Reservar cita
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`${import.meta.env.VITE_SERVER_URL}/api/auth/google?redirectTo=/booking`}
+                      className="block w-full bg-blue-600 text-white py-2 rounded-xl text-center hover:bg-blue-700 transition"
+                    >
+                      Reservar cita
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
@@ -102,13 +161,18 @@ function SobreNosotros() {
 
       <section className="bg-blue-50 py-20 px-6">
         <div className="max-w-6xl mx-auto space-y-12 text-center">
-          <h2 className="text-3xl font-bold text-blue-900">Reseñas de Google</h2>
+          <h2 className="text-3xl font-bold text-blue-900">
+            Reseñas de Google
+          </h2>
           {reviews.length === 0 ? (
             <p className="text-gray-600">No hay reseñas disponibles.</p>
           ) : (
             <div className="grid md:grid-cols-2 gap-6">
               {reviews.map((review, i) => (
-                <div key={i} className="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
+                <div
+                  key={i}
+                  className="bg-white p-6 rounded-xl shadow hover:shadow-md transition"
+                >
                   <p className="font-semibold">{review.author_name}</p>
                   <p className="text-yellow-500">⭐ {review.rating}</p>
                   <p className="text-gray-600 mt-2">{review.text}</p>
@@ -120,9 +184,16 @@ function SobreNosotros() {
       </section>
 
       <section className="bg-white py-20 px-6 text-center">
-        <h2 className="text-3xl font-semibold text-gray-800 mb-4">¿Quieres saber más o empezar terapia?</h2>
-        <p className="text-gray-600 mb-8">Estamos aquí para ayudarte. Da el primer paso hoy.</p>
-        <Link to="/#contact" className="inline-block bg-blue-600 text-white px-8 py-3 rounded-xl text-lg font-medium hover:bg-blue-700 transition">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-4">
+          ¿Quieres saber más o empezar terapia?
+        </h2>
+        <p className="text-gray-600 mb-8">
+          Estamos aquí para ayudarte. Da el primer paso hoy.
+        </p>
+        <Link
+          to="/#contact"
+          className="inline-block bg-blue-600 text-white px-8 py-3 rounded-xl text-lg font-medium hover:bg-blue-700 transition"
+        >
           Contacta con nosotros
         </Link>
       </section>
